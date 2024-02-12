@@ -7,6 +7,8 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        'node_modules/preline/dist/*.js',
+
     ],
 
     theme: {
@@ -15,7 +17,20 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
+
+        borderWidth: {
+            DEFAULT: '1px',
+            '0': '0',
+            '2': '2px',
+            '3': '3px',
+            '4': '4px',
+            '6': '6px',
+            '8': '8px',
+          }
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('preline/plugin'),
+    ],
 };
