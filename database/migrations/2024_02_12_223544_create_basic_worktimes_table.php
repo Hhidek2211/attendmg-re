@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('basic_worktimes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('ismanager');
-            $table->integer('manager_id')->nullable();
-            $table->rememberToken();
+            $table->integer("week_of_day");
+            $table->boolean("isleave");
+            $table->time("work_start_time");
+            $table->time("work_end_time");
+            $table->time("break_time");
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('basic_worktimes');
     }
 };
