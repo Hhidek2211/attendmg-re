@@ -19,9 +19,9 @@
                     <input type="hidden" name="weekofday[{{$i}}]" value="{{$i}}">
                     <tr class="[&>td]:px-1 [&>td]:py-1">
                         <td>{{ $weekday[$i] }}</td>
-                        <td><input type="time" name="start[{{$i}}]" value="08:00"></td>
-                        <td><input type="time" name="stop[{{$i}}]" value="17:00"></td>
-                        <td><input type="time" name="break[{{$i}}]" value="01:00"></td>
+                        <td><input type="time" name="start[{{$i}}]" value="{{$values[$i]['work_start_time']}}"></td>
+                        <td><input type="time" name="stop[{{$i}}]" value="{{$values[$i]['work_end_time']}}"></td>
+                        <td><input type="time" name="break[{{$i}}]" value="{{$values[$i]['break_time']}}"></td>
                         <td>
                             <input type="hidden" name="isleave[{{$i}}]" value="0">
                             <input type="checkbox" name="isleave[{{$i}}]" value="1">
