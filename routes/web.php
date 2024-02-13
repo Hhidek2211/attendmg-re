@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalenderController;
+use App\Http\Controllers\BasicWorktimeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth')->controller(BasicWorktimeController::class)->group(function(){
+    Route::get('/basicSetting', 'show_setting')->name('bsSet.show');
+    Route::post('/basicSetting', 'store_setting')->name('bsSet.store');
 });
 
 require __DIR__.'/auth.php';
