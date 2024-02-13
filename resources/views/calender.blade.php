@@ -7,4 +7,5 @@
             {!! $calender->render() !!}
         </div>
     </div>
+    <a href="/basicSetting">設定</a>
 </x-app-layout>
