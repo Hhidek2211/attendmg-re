@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('today_datas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->integer('data_type');
+            $table->integer('data_type');   //0:退勤(or何もしてない) 1:出勤中 2:休憩開始 3:休憩終了
             $table->datetime('time');
             $table->timestamps();
             //softdeleteにすべきかは要検討
