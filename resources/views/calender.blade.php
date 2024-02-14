@@ -11,7 +11,7 @@
         <div id="attend&setting" class="mx-auto w-full grid-cols-1">
             <div class="text-center w-full h-1/2">
                 <p class="text-lg text-gray-700">今日の出勤記録</p>
-                <div class="[$>table]:border-2 [&>table]:border-gray-300 [&_thead]:border-2 [&_thead]:border-gray-300 [&_th]:border [&_th]:border-gray-300 [&_td]:border">
+                <div class="[$>table]:w-full [$>table]:border-2 [&>table]:border-gray-300 [&_thead]:border-2 [&_thead]:border-gray-300 [&_th]:border [&_th]:border-gray-300 [&_th]:h-8 [&_th]:w-32 [&_td]:border [&_td]:h-8">
                     {!! $today !!}
                 </div>
             </div>
@@ -31,4 +31,5 @@
                 </div>
             </div>
         </div>
+    </div>
 </x-app-layout>

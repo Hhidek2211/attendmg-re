@@ -13,11 +13,12 @@ use Carbon\Carbon;
 class TodayDataController extends Controller
 {
     //TodayData関連処理への引き渡し
-    public static function show_todayDatas() {
-        $datas = new TodayDataView();
+    public static function show_todayDatas($userId) {
+        $datas = new TodayDataView($userId);
         return $datas->render();
     }
 
+    //タイムカードメニューの作成
     public static function render_attendButton($userId) {
         $type = TodayData::get_latest($userId)->data_type;
         $datas = new AttendButton($type);
@@ -28,12 +29,10 @@ class TodayDataController extends Controller
     public function save_todaydata(Request $request) { 
         $type = $request->input('type');
         $userid = Auth::id();
-        $now = Carbon::now()->format('Y-m-d h:m:s');
         
         $record = TodayData::create([
             'user_id' => $userid,
             'data_type' => $type,
-            'time' => $now,
         ]);
 
         return redirect(route('dashboard'));

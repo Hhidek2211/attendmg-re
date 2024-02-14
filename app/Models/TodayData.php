@@ -11,11 +11,35 @@ class TodayData extends Model
     use HasFactory;
 
 //  << 定義づけ以外の処理 >>
+    //最新の一件を取得
     public static function get_latest($userId) {
-        $record = TodayData::where('user_id', $userId)->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->first();
+        if(Self::exist_records($userId)) {
+            $record = TodayData::where('user_id', $userId)->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->first();
+        } else {
+            $record = new TodayData;
+            $record->data_type = 0;
+        }
         return $record;
     }
 
+    //ダッシュボード用データ取得(10件取得)
+    public static function get_userdata($userId) {
+        if(Self::exist_records($userId)) {
+            $records = TodayData::where('user_id', $userId)->orderby('created_at', 'DESC')->limit(10)->get();
+            $records = $records->sortBy('created_at');
+        } else {
+            $records = [];
+        }
+        return $records;
+      }
+
+    public static function exist_records($userId) {
+        if(empty(TodayData::where('user_id', $userId)->first())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 //  << モデル・テーブル定義のための処理 >>
     protected $table = 'today_datas';

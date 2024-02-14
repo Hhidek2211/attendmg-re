@@ -48,9 +48,9 @@ class User extends Authenticatable
     ];
 
     // リレーション定義
-    public function basic_worktimes(): BelongsToMany
+    public function basic_worktimes(): HasMany
     {
-        return $this->belongsToMany(BasicWorktime::class);
+        return $this->hasMany(BasicWorktime::class);
     }
 
     public function today_datas(): HasMany

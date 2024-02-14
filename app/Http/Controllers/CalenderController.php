@@ -10,16 +10,10 @@ use Illuminate\View\View;
 
 class CalenderController extends Controller
 {
-    // ダッシュボードへの移動
-    public function dashboard(): View
-    {
-        //ダッシュボード画面に必要な情報の収集
-        $calender = new CalenderView(time());
-        $today = TodayDataController::show_todayDatas();
-        $attend = TodayDataController::render_attendbutton(Auth::id());
-
-        return view('calender', ["calender" => $calender, "today"=> $today, "attend"=> $attend]);
-
-    }
+    //カレンダーの取得
+    public static function get_calender() {
+        $calender = new CalenderView(time(), Auth::id());
+        return $calender;
+    } 
 
 }
