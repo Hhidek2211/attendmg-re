@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\BasicWorktimeController;
+use App\Http\Controllers\TodayDataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->controller(BasicWorktimeController::class)->group(function(){
     Route::get('/basicSetting', 'show_setting')->name('bsSet.show');
     Route::post('/basicSetting', 'store_setting')->name('bsSet.store');
+});
+
+Route::middleware('auth')->controller(TodayDataController::class)->group(function(){
+    Route::get('/todaydata', 'save_todaydata')->name('today.save');
 });
 
 require __DIR__.'/auth.php';

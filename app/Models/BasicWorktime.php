@@ -12,7 +12,7 @@ class BasicWorktime extends Model
 {
     use HasFactory;
 
-    //データに関する処理
+//  <<データに関する処理>>
 
     //デフォルト設定レコードの作成
     public function create_bsset($requests) {

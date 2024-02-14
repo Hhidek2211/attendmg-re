@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -46,9 +47,14 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // リレーションについての記述
+    // リレーション定義
     public function basic_worktimes(): BelongsToMany
     {
         return $this->belongsToMany(BasicWorktime::class);
+    }
+
+    public function today_datas(): HasMany
+    {
+        return $this->hasMany(TodayData::class);
     }
 }

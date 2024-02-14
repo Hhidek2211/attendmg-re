@@ -23,11 +23,11 @@
             <div class="flex container w-3/4 h-1/6 mx-auto">
                 <div class="relative border-3 border-gray-300 rounded-lg w-full h-1/3 mx-3">
                     <a href="{{ route('bsSet.show') }}" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>
-                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5">デフォルト設定</div>
+                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">デフォルト設定</div>
                 </div>
                 <div class="relative border-3 border-gray-300 rounded-lg w-full h-1/3 mx-3">
                     <a href="{{ route('profile.edit') }}" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>
-                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5">アカウント設定</div>
+                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">アカウント設定</div>
                 </div>
             </div>
         </div>
