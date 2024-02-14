@@ -21,12 +21,13 @@ class TodayDataView {
   //今日の出勤記録データ表の作成
   public function render() {
     $datas = TodayData::get_userdata($this->user);
+    $i = 0;
 
     $html[] = '<table class="mx-auto w-4/5">';
     $html[] = '<thead>';
     $html[] = '<tr>';
-    $html[] = '<th class="w-3/5">時刻</th>';
-    $html[] = '<th class="w-2/5">内容</th>';
+    $html[] = '<th class="px-32">時刻</th>';
+    $html[] = '<th class="px-20">内容</th>';
     $html[] = '</tr>';
     $html[] = '</thead>';
     $html[] = '<tbody>';
@@ -38,6 +39,13 @@ class TodayDataView {
       $html[] = '<tr>';
       $html[] = '<td>'.$time.'</td>';
       $html[] = '<td>'.$type.'</td>';
+      $html[] = '</tr>';
+      $i++;
+    }
+    for($i; $i<10; $i++) {
+      $html[] = '<tr>';
+      $html[] = '<td></td>';
+      $html[] = '<td></td>';
       $html[] = '</tr>';
     }
     $html[] = '</tbody>';

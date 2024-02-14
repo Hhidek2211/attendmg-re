@@ -12,7 +12,7 @@ class CalenderController extends Controller
 {
     //カレンダーの取得
     public static function get_calender() {
-        $calender = new CalenderView(time());
+        $calender = new CalenderView(time(), Auth::id());
         return $calender;
     } 
 

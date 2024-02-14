@@ -4,13 +4,15 @@ namespace App\Calender;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BasicWorktimeController;
 use App\Models\BasicWorktime;
 use App\Models\User;
 
 class CalenderView {
 
-    function __construct($date) {
+    function __construct($date, $userId) {
         $this->carbon = new Carbon($date);
+        $this->user = $userId;
     }
 
     public function gettitle() {
@@ -36,8 +38,7 @@ class CalenderView {
     //カレンダーの出力情報
     function render() {
         $days = $this->getDay();
-        $basics = Auth::user();
-        $basics = $basics->basic_worktimes()->get();
+        $basics = BasicWorktimeController::get_bsset($this->user);
 
         $html[] = '<table class="min-w-full border border-2 border-gray-700">';
         $html[] = '<thead>';

@@ -29,13 +29,10 @@ class TodayDataController extends Controller
     public function save_todaydata(Request $request) { 
         $type = $request->input('type');
         $userid = Auth::id();
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-        dd($now);
         
         $record = TodayData::create([
             'user_id' => $userid,
             'data_type' => $type,
-            'time' => $now,
         ]);
 
         return redirect(route('dashboard'));
