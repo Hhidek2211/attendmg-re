@@ -60,6 +60,7 @@ class CalenderView {
             $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_start_time.'</td>';
             $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_end_time.'</td>';
             $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->break_time.'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.''.'</td>';
             $html[] = '</tr>';
         }
         $html[] = "</tbody>";
