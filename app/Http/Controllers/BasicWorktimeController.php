@@ -35,7 +35,7 @@ class BasicWorktimeController extends Controller
     public function store_setting(BasicWorktimeRequest $requests): RedirectResponse
     {
         $BsWork = new BasicWorktime;
-        $BsWork->update_bsset($requests);
+        $BsWork->update_bsset($requests, Auth::id());
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -10,6 +10,13 @@ class TodayData extends Model
 {
     use HasFactory;
 
+/**
+ *  ダッシュボード右側、今日の出勤履歴に必要なデータの取得及び、出退処理を担当するクラス（モデル）
+ *  退勤時に退勤したユーザーのデータをbasic_worktimesまたはexceptional_daysに保存し、その日のデータは削除する
+ *  レコードは一日ごとにリセットしたほうが良いかも？
+ */
+
+
 //  << 定義づけ以外の処理 >>
     //最新の一件を取得
     public static function get_latest($userId) {
