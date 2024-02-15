@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Carbon\Carbon;
 
 class BasicWorktime extends Model
 {
@@ -40,8 +41,8 @@ class BasicWorktime extends Model
     }
 
     //デフォルト設定レコードの更新
-    public function update_bsset($requests) {
-        $records = Auth::user()-> basic_worktimes()->get();
+    public function update_bsset($requests, $userId) {
+        $records = Self::where('user_id', $userId)->get();
 
         for($i=0; $i<7; $i++) {
             $record = $records->where('week_of_day', $i)->first();
@@ -51,9 +52,18 @@ class BasicWorktime extends Model
                     'work_start_time'=> $requests->start[$i],
                     'work_end_time'=> $requests->stop[$i],
                     'break_time'=> $requests->break[$i],
-                    'user_id'=> $authid,
+                    'user_id'=> $userId,
                     ]);
         }
+    }
+
+    //指定日のデフォルト設定の取得
+    public static function get_thatdaySet($userId, $day) {
+        $day = new Carbon($day);
+        $bsset = Self::where('user_id', $userId)
+                     ->where('week_of_day', $day->dayOfWeek)
+                     ->first();
+        return $bsset;
     }
 
     //ここからその他処理

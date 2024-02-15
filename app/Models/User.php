@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TodayData::class);
     }
+
+    public function exceptional_days(): HasMany
+    {
+        return $this->hasMany(ExceptionalDay::class);
+    }
 }
