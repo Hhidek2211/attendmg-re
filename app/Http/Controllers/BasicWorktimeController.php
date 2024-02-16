@@ -14,44 +14,34 @@ use App\Http\Requests\BasicWorktimeRequest;
 
 class BasicWorktimeController extends Controller
 {
+    //デフォルト設定Viewの表示
     public function show_setting(): View
     {
-        //Viewに表示するデフォルト値の取得or生成
-        if($this->judge_existset()) {
-            $values = User::find(Auth::id());
-            $values = $values->basic_worktimes()->get()->toArray();
-        } else {
-            for($i=0; $i<7; $i++) {
-                $values[] = [
-                    'week_of_day'=> $i,
-                    'isleave'=> 0,
-                    'work_start_time'=> '08:00:00',
-                    'work_end_time'=> '17:00:00',
-                    'break_time'=> '01:00:00'
-                ];
-            }
-        }
+        $bssets = new BasicWorktime;
+        $bssets = $bssets->get_userdata(Auth::id());
+ 
         //dd($values);
-        return view('basicSetting.setting', ['values'=> $values]);
+        return view('basicSetting.setting', ['values'=> $bssets]);
     }
 
-    //デフォルト設定の保存処理
+    //カレンダー等に表示するためのデータを渡す
+    //これいらないかも… 直にモデルにアクセスされるの気持ち悪くて作っただけ
+    public static function get_bsset($userId) {
+        $values = BasicWorktime::get_userdata($userId);
+        return $values;
+    }
+
+    //デフォルト設定の保存処理 -> 更新しかありえなくなったので更新のみで大丈夫なはず
     public function store_setting(BasicWorktimeRequest $requests): RedirectResponse
     {
         $BsWork = new BasicWorktime;
-
-        //updateorcreateで中間テーブルのカラムを条件にする方法がわからんかったので
-        //すでにデフォルト設定を保存しているかどうかで作成or更新の処理を分岐させる
-        if($this->judge_existset()) {
-            $BsWork->update_bsset($requests);
-        } else {
-            $BsWork->create_bsset($requests);
-        }
+        $BsWork->update_bsset($requests, Auth::id());
 
         return redirect(RouteServiceProvider::HOME);
     }
 
-    //デフォルト設定が保存されているかどうかの判定処理の切り出し -> 保存済みならTRUE
+    //デフォルト設定が存在しているかどうかの判定処理の切り出し -> 保存済みならTRUE
+    //恐らく不要　時を見て削除すべき
     public function judge_existset() {
         $auth = Auth::user();
         $BsWork = new BasicWorktime;

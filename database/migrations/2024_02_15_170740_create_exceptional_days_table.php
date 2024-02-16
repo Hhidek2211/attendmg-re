@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('basic_worktimes', function (Blueprint $table) {
+        Schema::create('exceptional_days', function (Blueprint $table) {
             $table->id();
-            $table->integer("week_of_day");
+            $table->date('day');
             $table->boolean("isleave");
             $table->time("work_start_time");
             $table->time("work_end_time");
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('basic_worktimes');
+        Schema::dropIfExists('exceptional_days');
     }
 };
