@@ -17,6 +17,9 @@ class ExceptionalDay extends Model
             $daynum = explode("-", $day->day);
             $ans[] = $daynum[2];
         }
+        if(empty($ans)){
+            $ans = [];
+        }
         return $ans;
     } 
 
