@@ -10,6 +10,16 @@ class ExceptionalDay extends Model
 {
     use HasFactory;
 
+// << テーブル定義以外>>
+    public static function get_exceptdays($userId) {
+        $days = Self::where('user_id', $userId)->get();
+        foreach($days as $day) {
+            $daynum = explode("-", $day->day);
+            $ans[] = $daynum[2];
+        }
+        return $ans;
+    } 
+
 // << テーブル定義 >>
     protected $fillable = [
         'day',
