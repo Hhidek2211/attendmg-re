@@ -52,6 +52,7 @@ class TodayDataController extends Controller
 
         $datas = new TimeProcess($records);
         $bsset = BasicWorktime::get_thatdaySet(Auth::id(), $datas->result['day']);
+        //dd($datas);
         if ($datas->judge_except($bsset)) {
             ExceptionalDay::create([
                 'day'=> $datas->result_f['day'],
@@ -59,6 +60,8 @@ class TodayDataController extends Controller
                 'work_start_time'=> $datas->result_f['start'],
                 'work_end_time'=> $datas->result_f['end'],
                 'break_time'=> $datas->result_f['break'],
+                'work_hour'=> $datas->result_f['hour'],
+                'over_time'=> $datas->result_f['over'],
                 'user_id'=> $userId
             ]);
         }

@@ -29,6 +29,8 @@ class ExceptionalDay extends Model
         'isleave',
         'work_start_time',
         'work_end_time',
+        'work_hour',
+        'over_time',
         'break_time',
         'user_id'
     ];
