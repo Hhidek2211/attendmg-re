@@ -18,6 +18,8 @@ return new class extends Migration
             $table->time("work_start_time");
             $table->time("work_end_time");
             $table->time("break_time");
+            $table->time('work_hour');
+            $table->time('over_time');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
