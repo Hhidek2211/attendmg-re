@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class OverTime extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'year',
+        'month',
+        'hour',
+    ];
 }

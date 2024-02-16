@@ -36,17 +36,35 @@ class UserData {
         $sunday->subDay($thatday->dayOfWeek);
         $basics = BasicWorktimeController::get_bsset($this->user);
         $excepts = ExceptionalDay::get_exceptdays($this->user);
-        //dd($calender);
 
         for($i = $sunday; $i < $thatday; $i->addDay()) {
             if(in_array($i->day, $excepts)) {
-                $datas[] = ExceptionalDay::where('day', $month.'-'.$day[0])->first();
+                $datas[] = ExceptionalDay::where('day', $i->format('Y-m-d'))->first();
             } else {
                 $datas[] = $basics[$i->dayOfWeek];
             }            
         }
         
         return $datas;
+    }
+
+    //指定日までのカレンダー情報の取得（指定日を含む）.
+    public function get_calender_tothatday() {
+        $thatday = $this->carbon;
+        $firstday = $this-> carbon-> copy()-> firstOfMonth();
+        $basics = BasicWorktimeController::get_bsset($this->user);
+        $excepts = ExceptionalDay::get_exceptdays($this->user);
+
+        for($i = $firstday; $i <= $thatday; $i->addDay()) {
+            if(in_array($i->day, $excepts)) {
+                $datas[] = ExceptionalDay::where('day', $i->format('Y-m-d'))->first();
+            } else {
+                $datas[] = $basics[$i->dayOfWeek];
+            }            
+        }
+
+        return $datas;
+        
     }
     
     //ユーザーの今月のカレンダーデータを取得
