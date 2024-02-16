@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BasicWorktimeController;
 use App\Models\BasicWorktime;
 use App\Models\User;
+use App\Models\ExceptionalDay;
 
 class CalenderView {
 
@@ -38,8 +39,13 @@ class CalenderView {
     //カレンダーの出力情報
     function render() {
         $days = $this->getDay();
+        $month = $this->carbon->format('Y-m');
         $basics = BasicWorktimeController::get_bsset($this->user);
 
+        //今ここ
+        //例外日を配列で取得したので別で取得するなりなんなりして表示してあげてください
+        $excepts = ExceptionalDay::get_exceptdays($this->user);
+        //dd($excepts);
         $html[] = '<table class="min-w-full border border-2 border-gray-700">';
         $html[] = '<thead>';
         $html[] = '<tr>';
@@ -54,15 +60,27 @@ class CalenderView {
         $html[] = '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
 
         //各日のデータ書き込み
+        //その日の例外データが存在するならExceptionalDayのレコードを、そうでないならデフォルト設定を記述
         foreach($days as $day) {
-            $html[] = '<tr>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[0].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[1].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_start_time.'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_end_time.'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->break_time.'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.''.'</td>';
-            $html[] = '</tr>';
+            if(in_array($day[0], $excepts)) {
+                $data = ExceptionalDay::where('day', $month.'-'.$day[0])->first();
+                $html[] = '<tr>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[0].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[1].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data->work_start_time.'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data->work_end_time.'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data->break_time.'</td>';
+                $html[] = '</tr>';
+            } else {
+                $html[] = '<tr>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[0].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$day[1].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_start_time.'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->work_end_time.'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$basics[$day[2]]->break_time.'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.''.'</td>';
+                $html[] = '</tr>';
+            }
         }
         $html[] = "</tbody>";
         $html[] = "</table>";

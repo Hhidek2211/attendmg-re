@@ -63,5 +63,8 @@ class TodayDataController extends Controller
             ]);
         }
 
+        //その日のデータを削除
+        $records = TodayData::where('user_id', $userId)->delete();
+
     }
 }
