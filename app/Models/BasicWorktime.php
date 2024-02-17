@@ -30,6 +30,8 @@ class BasicWorktime extends Model
     //デフォルト設定レコードの作成
     public static function create_bsset($userId) {
         for($i=0; $i<7; $i++) {
+            $week_datas = Self::where('user_id', $userId)->get();
+            $over = CalcOver::for_basicWorktime('08:00:00', $i, $week_datas);
             $record = BasicWorktime::create([
                 'week_of_day'=> $i,
                 'isleave'=> False,
@@ -37,7 +39,7 @@ class BasicWorktime extends Model
                 'work_end_time'=> '17:00:00',
                 'break_time'=> '01:00:00',
                 'work_hour'=> '08:00:00',
-                'over_time'=> '00:00:00',
+                'over_time'=> $over,
                 'user_id'=> $userId,
             ]);
         }
@@ -49,14 +51,14 @@ class BasicWorktime extends Model
         for($i=0; $i<7; $i++) {
             $record = $records->where('week_of_day', $i)->first();
             $hour = Self::calc_workhour($requests->start[$i], $requests->stop[$i], $requests->break[$i]);
-            $over = CalcOver::for_basicWorktime($hour);
+            $over = CalcOver::for_basicWorktime($hour, $requests->weekofday[$i], $records);
             $record->update([
                     'week_of_day'=> $requests->weekofday[$i],
                     'isleave'=> $requests->isleave[$i],
                     'work_start_time'=> $requests->start[$i],
                     'work_end_time'=> $requests->stop[$i],
                     'break_time'=> $requests->break[$i],
-                    //'work_hour'=> $hour,
+                    'work_hour'=> $hour,
                     'user_id'=> $userId,
                     ]);
         }

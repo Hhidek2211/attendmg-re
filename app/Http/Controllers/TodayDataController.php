@@ -67,6 +67,7 @@ class TodayDataController extends Controller
         }
 
         $OverTime = OverTimeController::calc_overtime($datas->result_f['day'], $userId);
+        
         //その日のデータを削除
         $records = TodayData::where('user_id', $userId)->delete();
 
