@@ -7,7 +7,7 @@ namespace App\Attendance;
 class AttendButton {
 
     function __construct($type) {
-        switch($type) {
+        switch($type) { //0 退勤 1 出勤 2 休憩開始 3 休憩終了 4 休暇
             case 0:
                 $this->html = $this->leaving();
                 break;
@@ -19,6 +19,8 @@ class AttendButton {
                 break;
             case 3:
                 $this->html = $this->at_work();
+                break;
+            case 4:
                 break;
         }   
     }
@@ -32,6 +34,10 @@ class AttendButton {
         $html[] = '<div class="relative border rounded-full w-3/4 mx-auto mt-2">';
         $html[] = '<a href="/todaydata?type=1" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>';
         $html[] = '<div class="mx-auto">出勤</div>';
+        $html[] = '</div>';
+        $html[] = '<div class="relative border rounded-full w-3/4 mx-auto mt-2">';
+        $html[] = '<a href="/todaydata?type=4" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>';
+        $html[] = '<div class="mx-auto">休暇として登録</div>';
         $html[] = '</div>';
         $html[] = '</div>';
 
