@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BasicWorktimeController;
 use App\Models\BasicWorktime;
 use App\Models\User;
+use App\Models\OverTime;
 use App\Models\ExceptionalDay;
 
 class CalenderView {
@@ -25,6 +26,10 @@ class CalenderView {
         $datas = new UserData($this->user, $this->carbon->format('Y-m-d'));
         $datas = $datas->get_usercalender();
         $today = $this->carbon->format('d');
+        $overtime = OverTime::where('user_id', $this->user)
+                            ->where('year', $this->carbon->format('Y'))
+                            ->where('month', $this->carbon->format('m'))
+                            ->first();
 
         $html[] = '<table class="min-w-full border border-2 border-gray-700">';
         $html[] = '<thead>';
@@ -44,13 +49,13 @@ class CalenderView {
         foreach($datas as $data) {
             // 文字色の指定
             $bg = "";
-            if ($data['day'] >= $today) {
+            if ($data['day'] > $today) {
                 $color = "text-gray-400";
+            } else {
+                $color = "text-black";
                 if ($data['day'] == $today) {
                     $bg = "bg-cyan-100";
                 }
-            } else {
-                $color = "text-black";
             }
             $html[] = '<tr class="'.$bg.'">';
             $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
@@ -64,6 +69,12 @@ class CalenderView {
         
         $html[] = "</tbody>";
         $html[] = "</table>";
+        $html[] = '<table class="border-2 mt-2">';
+        $html[] = '<tr>';
+        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">現在の残業時間</th>';
+        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-black dark:text-gray-200 border">'.$overtime->hour.'</th>';
+        $html[] = '</tr>';
+        $html[] = '</table>';
         return implode("", $html);
     }
 }
