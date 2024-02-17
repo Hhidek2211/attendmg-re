@@ -19,6 +19,6 @@ class DashboardController extends Controller
         $today = TodayDataController::show_todayDatas(Auth::id());
         $attend = TodayDataController::render_attendbutton(Auth::id());
 
-        return view('calender', ["calender" => $calender, "today"=> $today, "attend"=> $attend]);
+        return view('dashboard', ["calender" => $calender, "today"=> $today, "attend"=> $attend, "name"=> Auth::user()->name]);
     }
 }

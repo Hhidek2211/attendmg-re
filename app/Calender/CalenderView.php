@@ -25,7 +25,7 @@ class CalenderView {
     function render() {
         $datas = new UserData($this->user, $this->carbon->format('Y-m-d'));
         $datas = $datas->get_usercalender();
-        $today = $this->carbon->format('d');
+        $today = Carbon::today()->format('d');
         $overtime = OverTime::where('user_id', $this->user)
                             ->where('year', $this->carbon->format('Y'))
                             ->where('month', $this->carbon->format('m'))
@@ -62,7 +62,7 @@ class CalenderView {
             if($data['isleave'] == True) {
                 $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
                 $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
-                $html[] = '<td colspan="4" class="py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">休日</td>';
+                $html[] = '<td colspan="4" class="py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">休日</td>';
             } 
             else {
                 $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
