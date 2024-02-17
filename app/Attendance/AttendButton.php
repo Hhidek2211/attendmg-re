@@ -27,7 +27,7 @@ class AttendButton {
 
     //最新の状況に合わせた出席ボタンの出力の切り替え
     public function leaving() {
-        $html[] = '<div class="container mx-auto w-2/3 h-full text-center border">';
+        $html[] = '<div class="container mx-auto h-full text-center border">';
         $html[] = '<p class="text-lg text-gray-700 pt-1">タイムカードメニュー</p>';
         $html[] = '<p class="text-bs text-gray-700">現在の状態</p>';
         $html[] = '<p class="text-xl text-black font-bold">退勤中</p>';
@@ -45,7 +45,7 @@ class AttendButton {
     }
 
     public function at_work() {
-        $html[] = '<div class="container mx-auto w-2/3 h-full text-center border">';
+        $html[] = '<div class="container mx-auto h-full text-center border">';
         $html[] = '<p class="text-lg text-gray-700 pt-1">タイムカードメニュー</p>';
         $html[] = '<p class="text-bs text-gray-700">現在の状態</p>';
         $html[] = '<p class="text-xl text-black font-bold">勤務中</p>';
@@ -63,7 +63,7 @@ class AttendButton {
     }
 
     public function breaking() {
-        $html[] = '<div class="container mx-auto w-2/3 h-full text-center border">';
+        $html[] = '<div class="container mx-auto h-full text-center border">';
         $html[] = '<p class="text-lg text-gray-700 pt-1">タイムカードメニュー</p>';
         $html[] = '<p class="text-bs text-gray-700">現在の状態</p>';
         $html[] = '<p class="text-xl text-black font-bold">休憩中</p>';

@@ -15,7 +15,10 @@ class TimeProcess {
 
     //時間のフォーマット
     public function format_data() {
-        $first = $this->today_data->first();
+        $first = $this->today_data->where('data_type', 1)->first();  //出勤時間を基準に日時設定
+        if(is_null($first)) {
+            $first = $this->today_data->first();
+        }
         $day = new Carbon($first->time);
         $result = [
             'day'=>$day,
