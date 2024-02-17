@@ -86,6 +86,7 @@ class UserData {
                 'dayOfWeek_num'=> $day[2],
                 'start'=> $data->work_start_time,
                 'end'=> $data->work_end_time,
+                'over'=> $data->over_time,
                 'break'=> $data->break_time,
             ];
         }  

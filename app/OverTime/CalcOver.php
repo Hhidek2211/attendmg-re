@@ -27,18 +27,19 @@ class CalcOver {
         $thatday_sec = Self::format_time_toSec($data['hour']->format('H:i:s'));
         //dump($data['hour']);
         //dd($thatday_sec);
-        $week_work_times = $week_hours_sec + $thatday_sec;
         $legalsecs_day = 8 * 3600; // 日8時間
         $legalsecs_week = 40 * 3600; // 週40時間
+        $overtime_week = $week_hours_sec + $thatday_sec - $legalsecs_week;
+        $overtime_day = $thatday_sec - $legalsecs_day;
 
         // 週４０時間を超えているなら超えている分残業時間に加算
         // そうでないとき、８時間を超えているならその超過分が残業時間
         // どちらでもないなら労働時間は０
-        if($week_work_times > $legalsecs_week) {
-            $oversec = $week_work_times - $legalsecs_week;
+        if($overtime_week > 0) {
+            $oversec = min($overtime_week, $thatday_sec);
         } 
-        elseif ($thatday_sec > $legalsecs_day) {
-            $oversec = $thatday_sec - $legalsecs_day;
+        elseif ($overtime_day > 0) {
+            $oversec = $overtime_day;
         }
         else {
             $oversec = 0;
@@ -60,21 +61,48 @@ class CalcOver {
         return array_sum($seconds); 
     }
 
-    //その日の労働時間についてのみ考える
-    //⇒ 週４０時間を超えたパターンは例外として考えることにする
-    public static function for_basicWorktime($work) {
-        $work = new Carbon($work);
-        $zero = $hour->today();
-        $work_sec = $hour->diffInSeconds($zero);
+    //BasicWorktimeの型（曜日番号を含むデータ）から作成する
+    public static function for_basicWorktime($thatday_hour, $thatday_WofD, $week_datas) {  // $work = 労働時間(hh:mm:ss)
 
-        $legaltime = 8 * 60 * 60;   //法定労働時間は８時間.
-        $overtime = $sec - $legaltime;
+    //週の労働時間の計算
 
-        if ($overtime > 0) {
+        // 判定する日まで（判定日を含まない）までの合計
+        $sum_work_sec = 0;
+        for($i=0; $i < $thatday_WofD; $i++) {
 
-            $hour = floor($overtime / 3600);
-            $minute = floor(($overtime % 3600) / 60);
-            $second = $overtime % 60;
+            $sum_work_sec += Self::format_time_toSec($week_datas[$i]->work_hour);
+
+        }
+        //dump($sum_work_sec / (60 * 60));
+
+        //判定日の残業時間
+        $thatday_sec = Self::format_time_toSec($thatday_hour);
+
+        //基準時間の変数
+        $legaltime_week = 40 * 60 * 60; //週４０時間以上は残業.
+        $legaltime_day = 8 * 60 * 60;   //法定労働時間は８時間.
+        $overtime_week = $sum_work_sec + $thatday_sec - $legaltime_week;
+        $overtime_day = $thatday_sec - $legaltime_day;
+
+        //dump($overtime_week / 3600);
+
+        //週の基準を超えていたらその分が残業時間
+        //そうでなくて一日の労働時間で８時間を超えた分は残業時間
+        //どちらでもなければ０
+        if ($overtime_week > 0) {
+
+            $overtime_week = min($overtime_week, $thatday_sec);    //一日あたり取れる残業時間の最大はその日の労働時間.
+            $hour = floor($overtime_week / 3600);
+            $minute = floor(($overtime_week % 3600) / 60);
+            $second = $overtime_week % 60;
+            $ans = Carbon::createFromTime($hour, $minute, $second);
+            return $ans->format('H:i:s');
+
+        } elseif ($overtime_day > 0) {
+
+            $hour = floor($overtime_day / 3600);
+            $minute = floor(($overtime_day % 3600) / 60);
+            $second = $overtime_day % 60;
             $ans = Carbon::createFromTime($hour, $minute, $second);
             return $ans->format('H:i:s');
 

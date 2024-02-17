@@ -24,7 +24,7 @@ class CalenderView {
     function render() {
         $datas = new UserData($this->user, $this->carbon->format('Y-m-d'));
         $datas = $datas->get_usercalender();
-        //dd($datas);
+        $today = $this->carbon->format('d');
 
         $html[] = '<table class="min-w-full border border-2 border-gray-700">';
         $html[] = '<thead>';
@@ -42,13 +42,24 @@ class CalenderView {
         //各日のデータ書き込み
         //その日の例外データが存在するならExceptionalDayのレコードを、そうでないならデフォルト設定を記述
         foreach($datas as $data) {
-                $html[] = '<tr>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['start'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['end'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['break'].'</td>';
-                $html[] = '</tr>';
+            // 文字色の指定
+            $bg = "";
+            if ($data['day'] >= $today) {
+                $color = "text-gray-400";
+                if ($data['day'] == $today) {
+                    $bg = "bg-cyan-100";
+                }
+            } else {
+                $color = "text-black";
+            }
+            $html[] = '<tr class="'.$bg.'">';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['start'].'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['end'].'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['break'].'</td>';
+            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['over'].'</td>';
+            $html[] = '</tr>';
         }
         
         $html[] = "</tbody>";
