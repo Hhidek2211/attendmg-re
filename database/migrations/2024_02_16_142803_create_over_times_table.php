@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('basic_worktimes', function (Blueprint $table) {
+        Schema::create('over_times', function (Blueprint $table) {
             $table->id();
-            $table->integer("week_of_day");
-            $table->boolean("isleave");
-            $table->time("work_start_time");
-            $table->time("work_end_time");
-            $table->time("break_time");
-            $table->time('work_hour');
-            $table->time('over_time');
             $table->foreignId('user_id')->constrained('users');
+            $table->integer('year');
+            $table->integer('month');
+            $table->time('hour');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('basic_worktimes');
+        Schema::dropIfExists('over_times');
     }
 };

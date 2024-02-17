@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('basic_worktime_user', function (Blueprint $table) {
-            $table->foreignId('basic_worktime_id')->constrained('basic_worktimes');
+        Schema::create('today_datas', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->integer('data_type');   //0:退勤(or何もしてない) 1:出勤中 2:休憩開始 3:休憩終了
+            $table->timestamp('time');
+            $table->timestamps();
+            //softdeleteにすべきかは要検討
         });
     }
 
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('basic_worktime_user');
+        Schema::dropIfExists('today_datas');
     }
 };
