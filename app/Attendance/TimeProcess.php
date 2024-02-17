@@ -3,9 +3,11 @@
 namespace App\Attendance;
 
 use Carbon\Carbon;
+use App\OverTime\CalcOver;
 
 class TimeProcess {
 
+//  << TodayDataの記録をレコードとして書き込む形に変換する. >>
     function __construct($records) {
         $this->today_data = $records;
         $this->result = $this->format_data();
@@ -32,7 +34,8 @@ class TimeProcess {
                     $result['end'] = new Carbon($data->time);
                     $result['hour']->addSeconds($this->culc_sub($work_start, $data->time));
                     break;
-                case 1: //出勤
+                case 1: //出勤 ここで計算してるユーザーのID取得してます.
+                    $this->user = $data->user_id;
                     $result['start'] = new Carbon($data->time);
                     $work_start = $data->time;
                     break;
@@ -47,12 +50,17 @@ class TimeProcess {
             }
         }
 
+        //その日の残業時間の算出
+        $result['over'] = CalcOver::for_exceptionalday($result, $this->user);
+        //dd($result);
+
         //フォーマット処理
         $result_f['day'] = $result['day']->format('Y-m-d');
         $result_f['start'] = $result['start']->format('H:i:s');
         $result_f['end'] = $result['end']->format('H:i:s');
         $result_f['break'] = $result['break']->format('H:i:s');
         $result_f['hour'] = $result['hour']->format('H:i:s');
+        $result_f['over'] = $result['over']->format('H:i:s');
         $this->result_f = $result_f;
 
         return $result;
@@ -63,10 +71,11 @@ class TimeProcess {
         $comp = [
             'start'=> new Carbon($this->result_f['day'].' '.$bsset->work_start_time),
             'end'=> new Carbon($this->result_f['day'].' '.$bsset->work_end_time),
-            'break'=> new Carbon($this->result_f['day'].' '.$bsset->break_time)
+            'break'=> new Carbon($this->result_f['day'].' '.$bsset->break_time),
+            'over'=> new Carbon($this->result_f['day'].' '.$bsset->over_time),
         ];
         //dd($comp, $this->result);
-        $I = ['start', 'end', 'break'];
+        $I = ['start', 'end', 'break', 'over'];
         foreach ($I as $i) {
             $sub = $this->culc_sub($this->result[$i], $bsset[$i]);
             if ($sub > 60) {
@@ -76,6 +85,7 @@ class TimeProcess {
         return False;
     }
 
+    //時間差の計算
     public function culc_sub($start, $end) {
         $start = new Carbon($start);
         $end = new Carbon($end);

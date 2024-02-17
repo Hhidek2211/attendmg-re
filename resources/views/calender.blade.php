@@ -32,4 +32,5 @@
             </div>
         </div>
     </div>
+    <div class ="bg-cyan-100"></div>
 </x-app-layout>
