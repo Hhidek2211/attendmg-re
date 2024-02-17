@@ -84,6 +84,7 @@ class UserData {
                 'day' => $day[0],
                 'dayOfWeek' => $day[1],
                 'dayOfWeek_num'=> $day[2],
+                'isleave'=> $data->isleave,
                 'start'=> $data->work_start_time,
                 'end'=> $data->work_end_time,
                 'over'=> $data->over_time,

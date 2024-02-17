@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\OverTimeController;
 use App\Models\User;
 use App\OverTime\CalcOver;
+use App\Leaving\Leaving;
 use Carbon\Carbon;
 
 class BasicWorktime extends Model
@@ -32,17 +34,41 @@ class BasicWorktime extends Model
         for($i=0; $i<7; $i++) {
             $week_datas = Self::where('user_id', $userId)->get();
             $over = CalcOver::for_basicWorktime('08:00:00', $i, $week_datas);
+            if(in_array($i, [0, 6])) {
+                $isleave = True;
+            } else {
+                $isleave = False;
+            }
+
+            //休暇にあたるかどうかで代入する値を変更する
+            if($isleave) {
+                $datas = Leaving::set_values();
+            } else {
+            $datas = [
+                'isleave'=> $isleave,
+                'start'=> '08:00:00',
+                'end'=> '17:00:00',
+                'break'=> '01:00:00',
+                'hour'=> '08:00:00',
+                'over'=> $over,
+                ];
+            }
+
             $record = BasicWorktime::create([
                 'week_of_day'=> $i,
-                'isleave'=> False,
-                'work_start_time'=> '08:00:00',
-                'work_end_time'=> '17:00:00',
-                'break_time'=> '01:00:00',
-                'work_hour'=> '08:00:00',
-                'over_time'=> $over,
+                'isleave'=> $isleave,
+                'work_start_time'=> $datas['start'],
+                'work_end_time'=> $datas['end'],
+                'break_time'=> $datas['break'],
+                'work_hour'=> $datas['hour'],
+                'over_time'=> $datas['over'],
                 'user_id'=> $userId,
             ]);
         }
+
+        //残業時間データの初期作成
+        $today = Carbon::today()->format('Y-m-d');
+        OverTimeController::calc_overtime($today, $userId);
     }
 
     //デフォルト設定レコードの更新
@@ -50,18 +76,39 @@ class BasicWorktime extends Model
         $records = Self::where('user_id', $userId)->get();
         for($i=0; $i<7; $i++) {
             $record = $records->where('week_of_day', $i)->first();
+            $isleave = $requests->isleave[$i];
             $hour = Self::calc_workhour($requests->start[$i], $requests->stop[$i], $requests->break[$i]);
             $over = CalcOver::for_basicWorktime($hour, $requests->weekofday[$i], $records);
+
+            if($isleave) {
+                $datas = Leaving::set_values();
+            } else {
+                $datas = [
+                    'isleave'=> $isleave,
+                    'start'=> $requests->start[$i],
+                    'end'=> $requests->stop[$i],
+                    'break'=> $requests->break[$i],
+                    'hour'=> $hour,
+                    'over'=> $over,
+                ];
+            }
+
             $record->update([
                     'week_of_day'=> $requests->weekofday[$i],
-                    'isleave'=> $requests->isleave[$i],
-                    'work_start_time'=> $requests->start[$i],
-                    'work_end_time'=> $requests->stop[$i],
-                    'break_time'=> $requests->break[$i],
-                    'work_hour'=> $hour,
+                    'isleave'=> $isleave,
+                    'work_start_time'=> $datas['start'],
+                    'work_end_time'=> $datas['end'],
+                    'break_time'=> $datas['break'],
+                    'work_hour'=> $datas['hour'],
+                    'over_time'=> $datas['over'],
                     'user_id'=> $userId,
                     ]);
         }
+        
+        
+        //残業時間データの更新
+        $today = Carbon::today()->format('Y-m-d');
+        OverTimeController::calc_overtime($today, $userId);
     }
 
     //指定日のデフォルト設定の取得

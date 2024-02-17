@@ -22,6 +22,7 @@ class TodayDataController extends Controller
     }
 
     //タイムカードメニューの作成
+    //最新のtoday_datasを取得してそのtypeに応じてタイムカードのレンダリングを決定する
     public static function render_attendButton($userId) {
         $type = TodayData::get_latest($userId)->data_type;
         $datas = new AttendButton($type);
@@ -29,7 +30,8 @@ class TodayDataController extends Controller
     }
 
     //タイムカード処理
-    //退勤ならばデータのリセットに移行
+    //退勤 or 休日登録ならばデータのリセットに移行
+    //休日登録時も同様
     public function save_todaydata(Request $request) { 
         $type = $request->input('type');
         $userId = Auth::id();
@@ -39,9 +41,9 @@ class TodayDataController extends Controller
             'data_type' => $type,
         ]);
 
-        if($type == 0) {
+        if($type == 0 or $type == 4) {
             $this->leaving_work($userId);
-        }
+        } 
 
         return redirect(route('dashboard'));
     }
@@ -52,11 +54,11 @@ class TodayDataController extends Controller
 
         $datas = new TimeProcess($records);
         $bsset = BasicWorktime::get_thatdaySet(Auth::id(), $datas->result['day']);
-        //dd($datas);
+        
         if ($datas->judge_except($bsset)) {
             ExceptionalDay::create([
                 'day'=> $datas->result_f['day'],
-                'isleave'=> False,
+                'isleave'=> $datas->result_f['isleave'],
                 'work_start_time'=> $datas->result_f['start'],
                 'work_end_time'=> $datas->result_f['end'],
                 'break_time'=> $datas->result_f['break'],

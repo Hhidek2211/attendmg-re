@@ -19,8 +19,9 @@ class TimeProcess {
         $day = new Carbon($first->time);
         $result = [
             'day'=>$day,
-            'start'=> new Carbon,
-            'end'=> new Carbon, 
+            'isleave'=> False,
+            'start'=> "",
+            'end'=> "", 
             'break'=> Carbon::createFromTime(0,0,0),
             'hour'=> Carbon::createFromTime(0,0,0),
         ];
@@ -47,6 +48,11 @@ class TimeProcess {
                     $result['break']->addSeconds($this->culc_sub($break_start, $data->time));
                     $work_start = $data->time;
                     break;
+                case 4: //休日登録
+                    $this->user = $data->user_id;
+                    $result['isleave'] = True;
+                    $result['start'] = Carbon::createFromTime(0,0,0);
+                    $result['end'] = Carbon::createFromTime(0,0,0);
             }
         }
 
@@ -56,6 +62,7 @@ class TimeProcess {
 
         //フォーマット処理
         $result_f['day'] = $result['day']->format('Y-m-d');
+        $result_f['isleave'] = $result['isleave'];
         $result_f['start'] = $result['start']->format('H:i:s');
         $result_f['end'] = $result['end']->format('H:i:s');
         $result_f['break'] = $result['break']->format('H:i:s');
