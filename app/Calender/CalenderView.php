@@ -60,17 +60,17 @@ class CalenderView {
             }
             $html[] = '<tr class="'.$bg.'">';
             if($data['isleave'] == True) {
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
-                $html[] = '<td colspan="4" class="py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">休日</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 border">'.$data['day'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 border">'.$data['dayOfWeek'].'</td>';
+                $html[] = '<td colspan="4" class="py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' border">休日</td>';
             } 
             else {
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['start'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['end'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['break'].'</td>';
-                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['over'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 border">'.$data['day'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 border">'.$data['dayOfWeek'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' border">'.$data['start'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' border">'.$data['end'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' border">'.$data['break'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' border">'.$data['over'].'</td>';
             }
             $html[] = '</tr>';
         }
@@ -80,8 +80,8 @@ class CalenderView {
         $html[] = "</table>";
         $html[] = '<table class="border-2 mt-2">';
         $html[] = '<tr>';
-        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">現在の残業時間</th>';
-        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-black dark:text-gray-200 border">'.$overtime->hour.'</th>';
+        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 border">現在の残業時間</th>';
+        $html[] = '<th class="px-2 py-1 whitespace-nowrap text-sm text-center font-medium text-black border">'.$overtime->hour.'</th>';
         $html[] = '</tr>';
         $html[] = '</table>';
         return implode("", $html);
