@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\BasicWorktime;
+use App\Models\TodayData;
+use App\Models\OverTime;
+use App\Models\ExceptionalDay;
 
 class ProfileController extends Controller
 {
@@ -48,7 +52,25 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        $todays = TodayData::where('user_id', $user->id)->get();
+        $bssets = BasicWorktime::where('user_id', $user->id)->get();
+        $excepts = ExceptionalDay::where('user_id', $user->id)->get();
+        $overs = OverTime::where('user_id', $user->id)->get();
+
         Auth::logout();
+
+        foreach ($todays as $today) {
+            $today->delete();
+        }
+        foreach ($bssets as $bsset) {
+            $bsset->delete();
+        }
+        foreach ($excepts as $except) {
+            $except->delete();
+        }
+        foreach ($overs as $over) {
+            $over->delete();
+        }
 
         $user->delete();
 
