@@ -5,6 +5,7 @@ use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\BasicWorktimeController;
 use App\Http\Controllers\TodayDataController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ManagerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth')->controller(ManagerController::class)->group(function(){
+    Route::get('/manager', 'manager')->name('mg.dashboard');
+    Route::get('/manager/setting', 'setting')->name('mg.membersetting');
+    Route::post('/manager/setting', 'regester_member')->name('mg.regester');
+    Route::get('/manager/member/{user}', 'memberinfo')->name('mg.memberinfo');
 });
 
 Route::middleware('auth')->controller(BasicWorktimeController::class)->group(function(){

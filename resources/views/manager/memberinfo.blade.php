@@ -16,26 +16,13 @@
                     {!! $today !!}
                 </div>
             </div>
-            <div id="attendbutton" class="text-center mx-auto w-4/5 md:w-2/3 h-1/3">
-                <div class="h-48 [&>div]:border-3 [&>div]:rounded-lg [&>div]:border-gray-300">
-                    {!! $attend->render() !!}
-                </div>
-            </div>
-            <div class="flex container w-4/5 md:w-3/4 h-full mx-auto">
-                <div class="relative border-3 border-gray-300 rounded-lg w-full h-12 mx-3">
-                    <a href="{{ route('bsSet.show') }}" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>
-                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">デフォルト設定</div>
-                </div>
-                <div class="relative border-3 border-gray-300 rounded-lg w-full h-12 mx-3">
-                    <a href="{{ route('profile.edit') }}" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>
-                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">アカウント設定</div>
-                </div>
-                @if($user->ismanager)
+
+            <div class="flex container w-4/5 md:w-1/2 h-full mx-auto">
                 <div class="relative border-3 border-gray-300 rounded-lg w-full h-12 mx-3">
                     <a href="{{ route('mg.dashboard') }}" class="absolute top-0 left-0 w-full h-full cursor-pointer mx-auto"></a>
-                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">管理者画面</div>
+                    <div class="mx-auto text-center text-lg text-gray-700 pt-1.5 font-bold">戻る</div>
                 </div>
-                @endif
+
             </div>
         </div>
     </div>
