@@ -25,7 +25,7 @@ class CalenderView {
     function render() {
         $datas = new UserData($this->user, $this->carbon->format('Y-m-d'));
         $datas = $datas->get_usercalender();
-        $today = $this->carbon->format('d');
+        $today = Carbon::today()->format('d');
         $overtime = OverTime::where('user_id', $this->user)
                             ->where('year', $this->carbon->format('Y'))
                             ->where('month', $this->carbon->format('m'))
@@ -45,6 +45,7 @@ class CalenderView {
         $html[] = '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
 
         //各日のデータ書き込み
+        //休日登録されているときは「休日」の表記のみ行う
         //その日の例外データが存在するならExceptionalDayのレコードを、そうでないならデフォルト設定を記述
         foreach($datas as $data) {
             // 文字色の指定
@@ -58,15 +59,23 @@ class CalenderView {
                 }
             }
             $html[] = '<tr class="'.$bg.'">';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['start'].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['end'].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['break'].'</td>';
-            $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['over'].'</td>';
+            if($data['isleave'] == True) {
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
+                $html[] = '<td colspan="4" class="py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">休日</td>';
+            } 
+            else {
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['day'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium text-gray-800 dark:text-gray-200 border">'.$data['dayOfWeek'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['start'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['end'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['break'].'</td>';
+                $html[] = '<td class="px-1 py-1 whitespace-nowrap text-sm text-center font-medium '.$color.' dark:text-gray-200 border">'.$data['over'].'</td>';
+            }
             $html[] = '</tr>';
         }
         
+        //カレンダー下の総残業時間
         $html[] = "</tbody>";
         $html[] = "</table>";
         $html[] = '<table class="border-2 mt-2">';

@@ -23,7 +23,7 @@ class TodayDataView {
     $datas = TodayData::get_userdata($this->user);
     $i = 0;
 
-    $html[] = '<table class="mx-auto w-4/5">';
+    $html[] = '<table class="mx-auto md:w-4/5">';
     $html[] = '<thead>';
     $html[] = '<tr>';
     $html[] = '<th class="px-32">時刻</th>';
