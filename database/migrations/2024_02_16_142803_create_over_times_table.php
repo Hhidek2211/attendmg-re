@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->integer('year');
             $table->integer('month');
-            $table->time('hour');
+            //$table->time('hour');
+            $table->string('hour'); //postgres用
             $table->timestamps();
         });
     }
