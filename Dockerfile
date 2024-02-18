@@ -1,9 +1,3 @@
-FROM node:16-slim as node-builder
-
-COPY . ./app
-RUN cd /app && npm ci && npm run prod
-
-
 FROM php:8.1.5-apache
 
 RUN apt-get update && apt-get install -y \
