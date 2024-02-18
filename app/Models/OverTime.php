@@ -17,6 +17,11 @@ class OverTime extends Model
                      ->where('year', $now->format('Y'))
                      ->where('month', $now->format('m'))
                      ->first();
+
+        if(is_null($datas)) {
+            $datas = new Self();
+            $datas->hour = "00:00:00";
+        }
         return $datas;
     }
 
