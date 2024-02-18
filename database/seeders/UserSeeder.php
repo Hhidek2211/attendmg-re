@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             //'email_verified_at'=> 'test@test.com',
             'password'=> Hash::make('test1234'),
             'ismanager'=> TRUE,
-            'manager_id'=> null,
+            'manager_id'=> 1,
             'created_at'=> new DateTime(),
             'updated_at' => new DateTime(),
         ]);

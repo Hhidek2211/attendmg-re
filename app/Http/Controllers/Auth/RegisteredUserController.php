@@ -53,6 +53,13 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        //管理者として登録するなら自身の管理者は自身
+        if($ismanager) {
+            $user->update([
+                'manager_id' => Auth::id()
+            ]);
+        }
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

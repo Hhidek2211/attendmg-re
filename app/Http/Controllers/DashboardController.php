@@ -10,7 +10,7 @@ use App\Http\Controllers\TodayDataController;
 use App\Calender\CalenderView;
 
 
-// ダッシュボードに移動するときの処理のあれこれの受け渡し
+// ダッシュボードに移動するとき&そこから移動するときの処理のあれこれの受け渡し
 class DashboardController extends Controller
 {
     public function dashboard(): View
@@ -19,6 +19,6 @@ class DashboardController extends Controller
         $today = TodayDataController::show_todayDatas(Auth::id());
         $attend = TodayDataController::render_attendbutton(Auth::id());
 
-        return view('dashboard', ["calender" => $calender, "today"=> $today, "attend"=> $attend, "name"=> Auth::user()->name]);
+        return view('dashboard', ["calender" => $calender, "today"=> $today, "attend"=> $attend, "user"=> Auth::user()]);
     }
 }

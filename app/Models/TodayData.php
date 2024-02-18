@@ -25,9 +25,27 @@ class TodayData extends Model
         } else {
             $record = new TodayData;
             $record->data_type = 0;
+            $record->time = '00:00:00';
         }
         return $record;
     }
+
+    //現在の状況の取得
+    public static function get_now($userId) {
+        $record = Self::get_latest($userId);
+    
+        $types = ['退勤中', '勤務中', '休憩中', '勤務中'];
+        $type = $types[$record->data_type];
+    
+        $datas = [
+            'user'=> $record->user_id,
+            'type'=> $type,
+            'time'=> $record->time
+        ];
+    
+        return $datas;
+    }
+    
 
     //ダッシュボード用データ取得(10件取得)
     public static function get_userdata($userId) {
