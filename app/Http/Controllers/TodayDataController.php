@@ -39,6 +39,7 @@ class TodayDataController extends Controller
         $record = TodayData::create([
             'user_id' => $userId,
             'data_type' => $type,
+            'time'=> Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         if($type == 0 or $type == 4) {

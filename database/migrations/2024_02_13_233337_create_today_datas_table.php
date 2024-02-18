@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->integer('data_type');   //0:退勤(or何もしてない) 1:出勤中 2:休憩開始 3:休憩終了
-            $table->timestamp('time');
+            $table->timestamp('time')->nullable();
             $table->timestamps();
             //softdeleteにすべきかは要検討
         });
